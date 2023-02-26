@@ -39,7 +39,8 @@ func Test1(t *testing.T) {
 	Mq.Register("libin", 100)
 	Mq.Register("hexiaolin", 200)
 	Mq.SetPartiton()
-
+	
+	go Mq.MsgPull(context.Background(), allgroups, 1)
 	for i := 401; i < 405; i++ {
 		go Mq.MsgPush(context.Background(), &Msg{
 			ID:        i,
@@ -57,6 +58,5 @@ func Test1(t *testing.T) {
 		})
 	}
 
-	Mq.MsgPull(context.Background(), allgroups, 1)
 	time.Sleep(10000 * time.Millisecond)
 }
