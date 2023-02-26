@@ -30,7 +30,7 @@ func Test1(t *testing.T) {
 	group2 := NewConsumerGroup(200)
 	for i := 201; i < 205; i++ {
 		consumer := NewConsumer(i, YouDealMsg)
-		group1.Add(consumer)
+		group2.Add(consumer)
 	}
 
 	allgroups.add(group1)
