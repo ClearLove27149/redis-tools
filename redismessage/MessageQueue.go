@@ -74,11 +74,15 @@ func (mq *MessageQueue) MsgPull(ctx context.Context, allgroups *AllGroups, tag i
 	// TODO 组播，单播
 	// 1.广播，消息分发
 	for {
+		//c := 1
 		for topic, partition := range mq.Topic2Partition {
 			for _, p := range partition {
 				topicPart := fmt.Sprintf("%s:%d", topic, p)
 				//fmt.Println(topicPart)
 				body, err := mq.Client.LIndex(ctx, topicPart, -1).Bytes()
+				if body != nil {
+					fmt.Println(body)
+				}
 				if err != nil && !errors.Is(err, redis.Nil) {
 					continue
 				}
@@ -96,6 +100,10 @@ func (mq *MessageQueue) MsgPull(ctx context.Context, allgroups *AllGroups, tag i
 					consumerGroup.GroupConsume(topic, p, body, tag)
 				}
 			}
+			// if c == 1 {
+			// 	fmt.Printf("deal end %s", topic)
+			// 	c++
+			// }
 		}
 	}
 }
